@@ -7,6 +7,7 @@ import {BrowserRouter, Route, Routes} from 'react-router-dom'
 import ParkingComponent from './components/ParkingComponent'
 import LoginComponent from './components/LoginComponent'
 import ProtectedRoute from './components/route/ProtectedRoute'
+import ProfileComponent from './components/ProfileComponent'
 import { Navigate } from 'react-router-dom'
 
 function App() {
@@ -28,7 +29,9 @@ function App() {
           <Route path='/add-parking' element = { <ProtectedRoute isAdminPage={true}><ParkingComponent/></ProtectedRoute> }/>
           {/* // http://localhost:4000/update-parking/{id} */}
           <Route path='/update-parking/:id' element = { <ProtectedRoute isAdminPage={true}><ParkingComponent/></ProtectedRoute> }/>
-        
+          
+          {/* // http://localhost:4000/update-parking/{id} */}
+          <Route path='/user_info' element = { <ProtectedRoute><ProfileComponent/></ProtectedRoute> }/>
 
           {/* Перенаправление всех неизвестных маршрутов на логин */}
           <Route path="*" element={<Navigate to="/login" replace />} />
