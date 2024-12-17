@@ -7,6 +7,7 @@ const LogoutButton = () => {
     localStorage.removeItem('token'); // Удаляем токен
     localStorage.removeItem('username');
     localStorage.removeItem('roles');
+    localStorage.removeItem('user_id');
     navigate('/login'); // Перенаправляем на страницу логина
   };
 

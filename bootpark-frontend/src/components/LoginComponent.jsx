@@ -17,6 +17,7 @@ const LoginPage = () => {
         localStorage.setItem('token', response.data.accessToken); // Сохраняем токен
         localStorage.setItem('username', username);
         localStorage.setItem('roles', response.data.roles);
+        localStorage.setItem('user_id', response.data.id);
         navigate('/'); // Перенаправление на защищённую страницу
     } catch (error) {
         alert('Неверные имя пользователя или пароль');
