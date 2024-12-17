@@ -44,7 +44,7 @@ function ListParkingComponent() {
     function bookParking(parkingId, parkingAvailableSlotsAmount) {
        
         const now = new Date(); // Текущая дата
-        now.setDate(now.getDate() + 1); // Добавляем 1 день
+        now.setDate(now.getDate() + 2); // Добавляем 1 день
         const dateOfEnd = now.toISOString();
         
         const userEntityId = localStorage.getItem("user_id");

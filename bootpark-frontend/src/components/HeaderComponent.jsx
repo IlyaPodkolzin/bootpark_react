@@ -7,7 +7,7 @@ export const HeaderComponent = () => {
     <div>
         <header>
             <nav className='navbar navbar-dark bg-dark'>
-                <a className="navbar-brand" href="#">BootPark</a>
+                <a className="navbar-brand" href="/">BootPark</a>
                 <ProfileButton/>
                 <LogoutButton/>
             </nav>
