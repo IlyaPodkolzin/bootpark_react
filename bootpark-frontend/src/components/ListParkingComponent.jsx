@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from 'react'
 import { deleteParking, listParkings } from '../services/ParkingService'
 import { useNavigate } from 'react-router-dom'
+import AdminOnly from './wrapper/AdminOnlyWrapper';
 
 // если зашел админ - нужно отобразить все кнопки, иначе только кнопку "Забронировать"
-function ListParkingComponent({isAdmin}) {
+function ListParkingComponent() {
 
     const [parkings, setParkings] = useState([])
 
@@ -41,14 +42,18 @@ function ListParkingComponent({isAdmin}) {
   return (
     <div className='container'>
         <h2 className='text-center'>Список доступных парковок</h2>
-        {isAdmin && <button className='btn btn-primary mb-2' onClick={addNewParking}>Добавить парковку</button>}
+        <AdminOnly>
+            <button className='btn btn-primary mb-2' onClick={addNewParking}>Добавить парковку</button>
+        </AdminOnly>
         <table className='table table-striped table-bordered'>
             <thead>
                 <tr>
                     <th>Название</th>
                     <th>Адрес</th>
                     <th>Количество свободных мест</th>
-                    {isAdmin && <th>Действия</th>}
+                    <AdminOnly>
+                        <th>Действия</th>
+                    </AdminOnly>
                 </tr>
             </thead>
             <tbody>
@@ -58,14 +63,13 @@ function ListParkingComponent({isAdmin}) {
                             <td>{parking.name}</td>
                             <td>{parking.address}</td>
                             <td>{parking.availableSlotsAmount}/{parking.parkingSlotsAmount}</td>
-                            {
-                                isAdmin &&
+                            <AdminOnly>
                             <td>
                                 <button className='btn btn-info' onClick={() => updateParking(parking.id)}>Изменить</button>
                                 <button className='btn btn-danger' onClick={() => removeParking(parking.id)}
                                     style={{margin:'10px'}}>Удалить</button>
                             </td>
-                            }
+                            </AdminOnly>
                         </tr>
                     )
                 }
