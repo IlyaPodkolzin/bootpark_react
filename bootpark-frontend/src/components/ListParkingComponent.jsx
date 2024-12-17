@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import { deleteParking, listParkings } from '../services/ParkingService'
+import { deleteParking, listParkings, updateParking, updateParkingAvailableSlotsOnly } from '../services/ParkingService'
 import { useNavigate } from 'react-router-dom'
 import AdminOnly from './wrapper/AdminOnlyWrapper';
 import { createBookedSlot } from '../services/BookedSlotService';
@@ -28,7 +28,7 @@ function ListParkingComponent() {
         navigator('/add-parking')
     }
 
-    function updateParking(id) {
+    function updateParkingThenNavigate(id) {
         navigator(`/update-parking/${id}`)
     }
 
@@ -41,7 +41,7 @@ function ListParkingComponent() {
         });
     }
 
-    function bookParking(parkingId) {
+    function bookParking(parkingId, parkingAvailableSlotsAmount) {
        
         const now = new Date(); // Текущая дата
         now.setDate(now.getDate() + 1); // Добавляем 1 день
@@ -55,6 +55,11 @@ function ListParkingComponent() {
         })
 
         console.log(userEntityId, parkingId);
+
+        updateParkingAvailableSlotsOnly(parkingId, parkingAvailableSlotsAmount - 1).then((response) => {
+                console.log(response.data);
+                getAllParkings();
+        })
     }
 
   return (
@@ -84,13 +89,13 @@ function ListParkingComponent() {
                             <td>{parking.availableSlotsAmount}/{parking.parkingSlotsAmount}</td>
                             <AdminOnly>
                             <td>
-                                <button className='btn btn-info' onClick={() => updateParking(parking.id)}>Изменить</button>
+                                <button className='btn btn-info' onClick={() => updateParkingThenNavigate(parking.id)}>Изменить</button>
                                 <button className='btn btn-danger' onClick={() => removeParking(parking.id)}
                                     style={{margin:'10px'}}>Удалить</button>
                             </td>
                             </AdminOnly>
                             <td>
-                                <button className='btn btn-success' onClick={() => bookParking(parking.id)}>Забронировать</button>
+                                <button className='btn btn-success' onClick={() => bookParking(parking.id, parking.availableSlotsAmount)}>Забронировать</button>
                             </td>
                         </tr>
                     )
