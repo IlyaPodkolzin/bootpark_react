@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import apiClient from "../config/AxiosConfig";
 import { removeBookedSlotForUser } from "../services/BookedSlotService";
+import { updateParkingAvailableSlotsOnly } from "../services/ParkingService";
 
 const ProfileComponent = () => {
     const [bookedSlots, setBookedSlots] = useState([]);
@@ -24,6 +25,7 @@ const ProfileComponent = () => {
                 `http://localhost:8001/api/booked/user/${localStorage.getItem("user_id")}`
             );
             setBookedSlots(response.data); // Обновляем состояние bookedSlots
+            setLoading(false);
         } catch (err) {
             setError("Ошибка при загрузке данных о бронированиях");
             setLoading(false);
@@ -46,7 +48,7 @@ const ProfileComponent = () => {
             const parkingsMap = {};
             parkingsResponse.forEach(response => {
                 const parking = response.data;
-                parkingsMap[parking.id] = [parking.name, parking.address];
+                parkingsMap[parking.id] = [parking.name, parking.address, parking.availableSlotsAmount];
             });
 
             setParkings(parkingsMap);
@@ -97,13 +99,23 @@ const ProfileComponent = () => {
                                 <strong>Действителен до:</strong> {formatDateToDDMMYYYY(bookedSlot.dateOfEnd)}
                             </td>
                             <td className="container p-4 my-1 bg-dark text-white fs-5">
-                                <button className='btn btn-danger' onClick={() => removeBookedForUser(localStorage.getItem("user_id"), bookedSlot.id)}
-                                            style={{margin:'10px'}}>Удалить</button>
+                                <button
+                                    className='btn btn-danger'
+                                    onClick={() => {
+                                            removeBookedForUser(localStorage.getItem("user_id"), bookedSlot.id)
+                                            updateParkingAvailableSlotsOnly(bookedSlot.parkingId, parkings[bookedSlot.parkingId]?.[2] + 1)
+                                        }
+                                    }
+                                    style={{margin:'10px'}}>Удалить</button>
                             </td>
                         </tr>
                         ))
                     ) : (
-                    <p className="text-center fs-5">У вас пока нет активных бронирований.</p>
+                    <tr>
+                        <td>
+                            <p className="text-center fs-5">У вас пока нет активных бронирований.</p>
+                        </td>
+                    </tr>
                     )}
                 </tbody>
             </table>

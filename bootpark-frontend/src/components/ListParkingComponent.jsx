@@ -95,7 +95,10 @@ function ListParkingComponent() {
                             </td>
                             </AdminOnly>
                             <td>
-                                <button className='btn btn-success' onClick={() => bookParking(parking.id, parking.availableSlotsAmount)}>Забронировать</button>
+                                <button
+                                    className='btn btn-success'
+                                    disabled={parking.availableSlotsAmount === 0}
+                                    onClick={() => bookParking(parking.id, parking.availableSlotsAmount)}>Забронировать</button>
                             </td>
                         </tr>
                     )
