@@ -6,7 +6,9 @@ const ParkingComponent = () => {
 
     const [name, setName] = useState('')
     const [address, setAddress] = useState('')
+    const [availableSlotsAmount, setAvailableSlotsAmount] = useState('')
     const [parkingSlotsAmount, setParkingSlotsAmount] = useState('')
+    const [initialParkingSlotsAmount, setInitialParkingSlotsAmount] = useState(null)  // для сохранения количества парковочных мест до изменения
 
     const {id} = useParams();
     const[errors, setErrors] = useState({
@@ -22,7 +24,9 @@ const ParkingComponent = () => {
             getParking(id).then((response) => {
                 setName(response.data.name);
                 setAddress(response.data.address);
+                setAvailableSlotsAmount(response.data.availableSlotsAmount);
                 setParkingSlotsAmount(response.data.parkingSlotsAmount);
+                setInitialParkingSlotsAmount(response.data.parkingSlotsAmount)
             }).catch(error => {
                 console.error(error)
             })
@@ -34,7 +38,7 @@ const ParkingComponent = () => {
 
         if (validateForm()) {
 
-            // Изначально все места свободны, следовательно availableSlotsAmount = parkingSlotsAmount
+            // Изначально все места свободны, следовательно availableSlotsAmount = parkingSlotsAmount (upd. НЕТ!!!!!! ТОЛЬКО ПРИ СОЗДАНИИ)
             const availableSlotsAmount = parkingSlotsAmount;
 
             const parking = {name, address, availableSlotsAmount, parkingSlotsAmount}
@@ -84,6 +88,10 @@ const ParkingComponent = () => {
         }
         else if (+parkingSlotsAmount > 9999) {
             errorsCopy.parkingSlotsAmount = '\"Количество мест\" должно быть меньше 9999.';
+            valid = false;
+        }
+        else if (initialParkingSlotsAmount && availableSlotsAmount - (initialParkingSlotsAmount - +parkingSlotsAmount) < 0) {
+            errorsCopy.parkingSlotsAmount = `\"Количество мест\" должно быть не меньше количества забронированных мест (${initialParkingSlotsAmount - availableSlotsAmount}).`;
             valid = false;
         }
 
