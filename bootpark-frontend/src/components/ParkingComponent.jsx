@@ -40,8 +40,9 @@ const ParkingComponent = () => {
 
             // Изначально все места свободны, следовательно availableSlotsAmount = parkingSlotsAmount (upd. НЕТ!!!!!! ТОЛЬКО ПРИ СОЗДАНИИ)
             const availableSlotsAmount = parkingSlotsAmount;
+            const bookedSlotsIds = []; // пустой список забронированных мест (ведь парковка только создана, а сервер ожидает список броней)
 
-            const parking = {name, address, availableSlotsAmount, parkingSlotsAmount}
+            const parking = {name, address, availableSlotsAmount, parkingSlotsAmount, bookedSlotsIds}
             console.log(parking);
 
             if (id) {
@@ -71,11 +72,15 @@ const ParkingComponent = () => {
         if (!name.trim()) {
             errorsCopy.name = '\"Название\" обязательно для заполнения.';
             valid = false;
+        } else {
+            errorsCopy.name = null;
         }
 
         if (!address.trim()) {
             errorsCopy.address = '\"Адрес\" обязателен для заполнения.';
             valid = false;
+        } else {
+            errorsCopy.address = null;
         }
 
         if (!parkingSlotsAmount) {
@@ -93,6 +98,8 @@ const ParkingComponent = () => {
         else if (initialParkingSlotsAmount && availableSlotsAmount - (initialParkingSlotsAmount - +parkingSlotsAmount) < 0) {
             errorsCopy.parkingSlotsAmount = `\"Количество мест\" должно быть не меньше количества забронированных мест (${initialParkingSlotsAmount - availableSlotsAmount}).`;
             valid = false;
+        } else {
+            errorsCopy.parkingSlotsAmount = null
         }
 
         setErrors(errorsCopy);
@@ -144,7 +151,7 @@ const ParkingComponent = () => {
                                     className={`form-control ${ errors.address ? 'is-invalid': ''}`}
                                     onChange={(e) => setAddress(e.target.value)}
                                 ></input>
-                                { errors.name && <div className='invalid-feedback'> { errors.address} </div> }
+                                { errors.address && <div className='invalid-feedback'> { errors.address} </div> }
                                 </label>
                             </div>
 
@@ -158,7 +165,7 @@ const ParkingComponent = () => {
                                     className={`form-control ${ errors.parkingSlotsAmount ? 'is-invalid': ''}`}
                                     onChange={(e) => setParkingSlotsAmount(e.target.value)}
                                 ></input>
-                                { errors.name && <div className='invalid-feedback'> { errors.parkingSlotsAmount} </div> }
+                                { errors.parkingSlotsAmount && <div className='invalid-feedback'> { errors.parkingSlotsAmount} </div> }
                                 </label>
                             </div>
 
