@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react'
-import { useParams } from 'react-router-dom'
-import { deleteBookedSlotByAdmin, listBookedSlotsForParking } from '../services/BookedSlotService';
-import { getParking, updateParkingAvailableSlotsOnly } from '../services/ParkingService';
-import { deleteUser, getUser } from '../services/UserService';
+import { useNavigate, useParams } from 'react-router-dom'
+import { deleteBookedSlotByAdmin, listBookedSlotsForParking, listBookedSlotsForUser } from '../../service/BookedSlotService';
+import { getParking, updateParkingAvailableSlotsOnly } from '../../service/ParkingService';
+import { deleteUser, getUser } from '../../service/UserService';
 
 function ListParkingBookedSlotsComponent() {
 
@@ -10,6 +10,9 @@ function ListParkingBookedSlotsComponent() {
     const [userNames, setUserNames] = useState({});
     const { parkingId } = useParams(); // Достали айди парковки из запроса
     const [parkingName, setParkingName] = useState([]);
+    
+    
+    const navigator = useNavigate();
 
     // Получаем название парковки
     useEffect(() => {
@@ -75,10 +78,37 @@ function ListParkingBookedSlotsComponent() {
         });
     }
 
-    function removeUser(id) {
-        deleteUser(id).then(() => {
+    function removeUser(userId) {
+        listBookedSlotsForUser(userId).then(async (response) => {
+            const bookedSlots = response.data;
+        
+            await Promise.all(
+                bookedSlots.map(async (elem) => {
+                    const parkingResponse = await getParking(elem.parkingId);
+                    const availableSlots = parkingResponse.data.availableSlotsAmount;
+        
+                    // Увеличиваем количество свободных мест определенной для брони парковки на 1 для каждой удаляемой брони удаляемого пользоваля
+                    await updateParkingAvailableSlotsOnly(elem.parkingId, availableSlots + 1);
+                })
+            );
+        
+            console.log('Количество свободных мест обновлено для всех парковок.');
+        }).catch((error) => {
+            console.error('Ошибка при обновлении:', error);
+        })
+        .then(() => {
+            if (localStorage.getItem("user_id") == userId) { // Если это наш профиль - нас нужно перенаправить на страницу логина
+                navigator("/login");
+                localStorage.removeItem("user_id");
+            }
+         })
+        .catch(error => {
+            console.error(error);
+        })
+        deleteUser(userId).then(() => {
             getAllBookedSlotsForParking();
-        }).catch(error => {
+        })
+        .catch(error => {
             console.error(error);
         });
     }
@@ -92,7 +122,7 @@ function ListParkingBookedSlotsComponent() {
                         bookedSlots.map(bookedSlot =>
                             <tr key={bookedSlot.id}>
                                 <td>{formatDateToDDMMYYYY(bookedSlot.dateOfEnd)}</td>
-                                <td>{userNames[bookedSlot.userEntityId] || 'Загрузка...'}</td>
+                                <td>{userNames[bookedSlot.userEntityId] || 'Загрузка...'} <strong>{localStorage.getItem("user_id") == bookedSlot.userEntityId && "(Ваш аккаунт)"}</strong></td>
                                 <td>
                                     <button className='btn btn-danger' onClick={() => removeBookedSlots(bookedSlot.id)}>Удалить бронь</button>
                                     <button className='btn btn-danger' onClick={() => removeUser(bookedSlot.userEntityId)}

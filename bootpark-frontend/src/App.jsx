@@ -1,14 +1,15 @@
 import './App.css'
-import ListParkingComponent from './components/ListParkingComponent'
-import { HeaderComponent } from './components/HeaderComponent'
-import FooterComponent from './components/FooterComponent'
+import ListParkingComponent from './components/page/ListParkingComponent'
+import { HeaderComponent } from './components/page/HeaderComponent'
+import FooterComponent from './components/page/FooterComponent'
 import {BrowserRouter, Route, Routes} from 'react-router-dom'
-import ParkingComponent from './components/ParkingComponent'
-import LoginComponent from './components/LoginComponent'
+import ParkingComponent from './components/page/ParkingComponent'
+import LoginComponent from './components/page/LoginComponent'
 import ProtectedRoute from './components/route/ProtectedRoute'
-import ProfileComponent from './components/ProfileComponent'
+import ProfileComponent from './components/page/ProfileComponent'
 import { Navigate } from 'react-router-dom'
-import ListParkingBookedSlotsComponent from './components/ListParkingBookedSlotsComponent'
+import ListParkingBookedSlotsComponent from './components/page/ListParkingBookedSlotsComponent'
+import RegisterComponent from './components/page/RegisterComponent'
 
 function App() {
 
@@ -20,6 +21,9 @@ function App() {
 
           {/* // http://localhost:4000/login */}
           <Route path='/login' element= { <LoginComponent/>}/>
+
+          {/* // http://localhost:4000/register */}
+          <Route path='/register' element= { <RegisterComponent/>}/>
 
           {/* // http://localhost:4000 */}
           <Route path='/' element = { <ProtectedRoute><ListParkingComponent/></ProtectedRoute> }/>

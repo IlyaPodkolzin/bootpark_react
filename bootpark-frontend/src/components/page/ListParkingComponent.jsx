@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react'
-import { deleteParking, listParkings, updateParkingAvailableSlotsOnly } from '../services/ParkingService'
+import { deleteParking, listParkings, updateParkingAvailableSlotsOnly } from '../../service/ParkingService'
 import { useNavigate } from 'react-router-dom'
-import AdminOnly from './wrapper/AdminOnlyWrapper';
-import { createBookedSlot } from '../services/BookedSlotService';
+import AdminOnly from '../wrapper/AdminOnlyWrapper';
+import { createBookedSlot } from '../../service/BookedSlotService';
 
 // Если зашел администратор - нужно отобразить все кнопки, иначе только кнопку "Забронировать"
 function ListParkingComponent() {

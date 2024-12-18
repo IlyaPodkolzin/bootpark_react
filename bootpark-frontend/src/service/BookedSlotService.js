@@ -9,4 +9,6 @@ export const removeBookedSlotForUser = (userId, bookedSlotId) => apiClient.delet
 
 export const listBookedSlotsForParking = (parkingId) => apiClient.get(REST_API_BASE_URL + "/admin/parking/" + parkingId);
 
+export const listBookedSlotsForUser = (userId) => apiClient.get(REST_API_BASE_URL + "/user/" + userId);
+
 export const deleteBookedSlotByAdmin = (bookedSlotId) => apiClient.delete(REST_API_BASE_URL + "/admin/slot/" + bookedSlotId);

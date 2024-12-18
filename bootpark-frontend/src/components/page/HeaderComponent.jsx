@@ -1,6 +1,6 @@
 import React from 'react'
-import LogoutButton from './buttons/LogoutButton'
-import ProfileButton from './buttons/ProfileButton'
+import LogoutButton from '../button/LogoutButton'
+import ProfileButton from '../button/ProfileButton'
 
 export const HeaderComponent = () => {
   return (

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { createParking, getParking, updateParking } from '../services/ParkingService'
+import { createParking, getParking, updateParking } from '../../service/ParkingService'
 import { useNavigate, useParams, Routes, Route, Link, Navigate } from 'react-router-dom'
 
 const ParkingComponent = () => {

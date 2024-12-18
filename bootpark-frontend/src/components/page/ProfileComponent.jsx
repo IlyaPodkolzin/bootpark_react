@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import apiClient from "../config/AxiosConfig";
-import { removeBookedSlotForUser } from "../services/BookedSlotService";
-import { updateParkingAvailableSlotsOnly } from "../services/ParkingService";
+import apiClient from "../../config/AxiosConfig";
+import { removeBookedSlotForUser } from "../../service/BookedSlotService";
+import { updateParkingAvailableSlotsOnly } from "../../service/ParkingService";
 
 const ProfileComponent = () => {
     const [bookedSlots, setBookedSlots] = useState([]);
