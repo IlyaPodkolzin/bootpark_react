@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import { deleteParking, listParkings, updateParking, updateParkingAvailableSlotsOnly } from '../services/ParkingService'
+import { deleteParking, listParkings, updateParkingAvailableSlotsOnly } from '../services/ParkingService'
 import { useNavigate } from 'react-router-dom'
 import AdminOnly from './wrapper/AdminOnlyWrapper';
 import { createBookedSlot } from '../services/BookedSlotService';
@@ -8,12 +8,16 @@ import { createBookedSlot } from '../services/BookedSlotService';
 function ListParkingComponent() {
 
     const [parkings, setParkings] = useState([])
-    const [bookingErrors, setBookingErrors] = useState({}); // Состояние для хранения ошибок
+    const [bookedSlotsErrors, setBookedSlotsErrors] = useState({}); // Состояние для хранения ошибок
     const navigator = useNavigate();
 
     useEffect(() => {
         getAllParkings();
     }, [])
+
+    function inspectAllBookedForParking(parkingId) {
+        navigator(`/parkings/${parkingId}`)
+    }
 
     function getAllParkings() {
         listParkings().then((response) => {
@@ -44,7 +48,7 @@ function ListParkingComponent() {
     function bookParking(parkingId, parkingAvailableSlotsAmount) {
        
         const now = new Date(); // Текущая дата
-        now.setDate(now.getDate() + 2); // Добавляем 1 день
+        now.setDate(now.getDate() + 1); // Добавляем 1 день
         const dateOfEnd = now.toISOString();
         
         const userEntityId = localStorage.getItem("user_id");
@@ -63,7 +67,7 @@ function ListParkingComponent() {
         .catch(error => {  // иначе добавляем ошибку для данной парковки, что у данного пользователя уже есть место на этой парковке
             console.error(error);
             // Обновляем состояние ошибок для этой парковки
-            setBookingErrors((prevErrors) => ({
+            setBookedSlotsErrors((prevErrors) => ({
                 ...prevErrors,
                 [parkingId]: 'Место на парковке уже забронировано.',
             }));
@@ -86,6 +90,9 @@ function ListParkingComponent() {
                         <th>Действия</th>
                     </AdminOnly>
                     <th>Забронировать</th>
+                    <AdminOnly>
+                        <th>Все брони</th>
+                    </AdminOnly>
                 </tr>
             </thead>
             <tbody>
@@ -105,15 +112,22 @@ function ListParkingComponent() {
                             <td>
                                 <button
                                     className='btn btn-success'
-                                    disabled={parking.availableSlotsAmount === 0 || bookingErrors[parking.id]}  // Кнопка деактивируется, если нет свободных мест или пользователь уже имеет активную бронь
+                                    disabled={parking.availableSlotsAmount === 0 || bookedSlotsErrors[parking.id]}  // Кнопка деактивируется, если нет свободных мест или пользователь уже имеет активную бронь
                                     onClick={() => bookParking(parking.id, parking.availableSlotsAmount)}>
                                         Забронировать
                                 </button>
-                                {bookingErrors[parking.id] && (
+                                {bookedSlotsErrors[parking.id] && (
                                     <div style={{ color: 'green', marginTop: '5px' }}>
-                                        {bookingErrors[parking.id]}
+                                        {bookedSlotsErrors[parking.id]}
                                     </div>
                                 )}
+                            </td>
+                            <td>
+                                <button
+                                    className='btn btn-secondary'
+                                    onClick={() => inspectAllBookedForParking(parking.id)}>
+                                        Посмотреть
+                                </button>
                             </td>
                         </tr>
                     )
