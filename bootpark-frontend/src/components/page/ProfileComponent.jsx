@@ -83,7 +83,7 @@ const ProfileComponent = () => {
     
     return (
         <div className="container">
-            <h1 className="text-center">Личный кабинет</h1>
+            <h1 className="text-center" style={{margin: "10px"}}>Личный кабинет</h1>
             <h2 className="text-center">Добро пожаловать, {localStorage.getItem("username")}!</h2>
             <h3 className="text-center">Ваши бронирования:</h3>
             <table className='table'>

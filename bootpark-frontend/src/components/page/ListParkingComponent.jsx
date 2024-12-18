@@ -76,9 +76,15 @@ function ListParkingComponent() {
 
   return (
     <div className='container'>
-        <h2 className='text-center'>Список доступных парковок</h2>
+        <h2 className='text-center' style={{margin: "10px"}}>Список доступных парковок</h2>
         <AdminOnly>
-            <button className='btn btn-primary mb-2' onClick={addNewParking}>Добавить парковку</button>
+            <div className='mb-3'>
+                <button
+                    className='btn btn-primary w-100'
+                    onClick={addNewParking}>
+                    Добавить парковку
+                </button>
+            </div>
         </AdminOnly>
         <table className='table table-striped table-bordered'>
             <thead>
@@ -113,11 +119,12 @@ function ListParkingComponent() {
                                 <button
                                     className='btn btn-success'
                                     disabled={parking.availableSlotsAmount === 0 || bookedSlotsErrors[parking.id]}  // Кнопка деактивируется, если нет свободных мест или пользователь уже имеет активную бронь
-                                    onClick={() => bookParking(parking.id, parking.availableSlotsAmount)}>
+                                    onClick={() => bookParking(parking.id, parking.availableSlotsAmount)}
+                                    style={{margin:'10px'}}>
                                         Забронировать
                                 </button>
                                 {bookedSlotsErrors[parking.id] && (
-                                    <div style={{ color: 'green', marginTop: '5px' }}>
+                                    <div style={{ color: 'green', margin: '10px' }}>
                                         {bookedSlotsErrors[parking.id]}
                                     </div>
                                 )}
@@ -126,7 +133,8 @@ function ListParkingComponent() {
                             <td>
                                 <button
                                     className='btn btn-secondary'
-                                    onClick={() => inspectAllBookedForParking(parking.id)}>
+                                    onClick={() => inspectAllBookedForParking(parking.id)}
+                                    style={{margin:'10px'}}>
                                         Посмотреть
                                 </button>
                             </td>

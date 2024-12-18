@@ -11,7 +11,7 @@ const LogoutButton = () => {
     navigate('/login'); // Перенаправляем на страницу логина
   };
 
-  return <button onClick={handleLogout}>Выйти</button>;
+  return <button style={{margin: "10px"}} className='btn btn-light' onClick={handleLogout}>Выйти</button>;
 };
 
 export default LogoutButton;

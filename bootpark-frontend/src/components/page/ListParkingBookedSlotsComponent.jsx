@@ -87,7 +87,7 @@ function ListParkingBookedSlotsComponent() {
                     const parkingResponse = await getParking(elem.parkingId);
                     const availableSlots = parkingResponse.data.availableSlotsAmount;
         
-                    // Увеличиваем количество свободных мест определенной для брони парковки на 1 для каждой удаляемой брони удаляемого пользоваля
+                    // Увеличиваем количество свободных мест определенной для брони парковки на 1 для каждой удаляемой брони удаляемого пользоваля (p.s. изменить логику изменения количества  свободных мест при добавлении/удалении броней)
                     await updateParkingAvailableSlotsOnly(elem.parkingId, availableSlots + 1);
                 })
             );
@@ -115,7 +115,7 @@ function ListParkingBookedSlotsComponent() {
 
     return (
         <div className='container'>
-            <h2 className='text-center'>Список бронирований для парковки "{parkingName}"</h2>
+            <h2 className='text-center' style={{margin: "10px"}}>Список бронирований для парковки "{parkingName}"</h2>
             <table className='table table-striped table-bordered'>
                 <tbody>
                     {bookedSlots.length > 0 ? (

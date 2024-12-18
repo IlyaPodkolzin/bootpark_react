@@ -4,7 +4,7 @@ const FooterComponent = () => {
   return (
     <div>
         <footer className='footer'>
-            <span>ИКБО-16-22 МОРОЗОВ И.С. 2024</span>
+            <p style={{margin: "10px"}}>ИКБО-16-22 МОРОЗОВ И.С. 2024</p>
         </footer>
     </div>
   )

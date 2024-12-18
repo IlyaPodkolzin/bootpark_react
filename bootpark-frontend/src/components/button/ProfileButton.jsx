@@ -7,7 +7,7 @@ const ProfileButton = () => {
     navigate('/user_info'); // Перенаправляем на страницу логина
   };
 
-  return <button onClick={handleProfile}>Личный кабинет</button>;
+  return <button style={{margin: "10px"}} className='btn btn-light' onClick={handleProfile}>Личный кабинет</button>;
 };
 
 export default ProfileButton;
