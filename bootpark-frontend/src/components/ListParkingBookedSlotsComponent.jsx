@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import { useParams } from 'react-router-dom'
 import { deleteBookedSlotByAdmin, listBookedSlotsForParking } from '../services/BookedSlotService';
 import { getParking, updateParkingAvailableSlotsOnly } from '../services/ParkingService';
-import { getUser } from '../services/UserService';
+import { deleteUser, getUser } from '../services/UserService';
 
 function ListParkingBookedSlotsComponent() {
 
@@ -75,6 +75,14 @@ function ListParkingBookedSlotsComponent() {
         });
     }
 
+    function removeUser(id) {
+        deleteUser(id).then(() => {
+            getAllBookedSlotsForParking();
+        }).catch(error => {
+            console.error(error);
+        });
+    }
+
     return (
         <div className='container'>
             <h2 className='text-center'>Список бронирований для парковки "{parkingName}"</h2>
@@ -87,7 +95,7 @@ function ListParkingBookedSlotsComponent() {
                                 <td>{userNames[bookedSlot.userEntityId] || 'Загрузка...'}</td>
                                 <td>
                                     <button className='btn btn-danger' onClick={() => removeBookedSlots(bookedSlot.id)}>Удалить бронь</button>
-                                    <button className='btn btn-danger' onClick={() => {}}
+                                    <button className='btn btn-danger' onClick={() => removeUser(bookedSlot.userEntityId)}
                                         style={{margin:'10px'}}>Удалить пользователя</button>
                                 </td>
                             </tr>

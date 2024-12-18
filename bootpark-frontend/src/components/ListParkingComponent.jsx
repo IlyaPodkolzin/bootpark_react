@@ -122,6 +122,7 @@ function ListParkingComponent() {
                                     </div>
                                 )}
                             </td>
+                            <AdminOnly>
                             <td>
                                 <button
                                     className='btn btn-secondary'
@@ -129,6 +130,7 @@ function ListParkingComponent() {
                                         Посмотреть
                                 </button>
                             </td>
+                            </AdminOnly>
                         </tr>
                     )
                 }
