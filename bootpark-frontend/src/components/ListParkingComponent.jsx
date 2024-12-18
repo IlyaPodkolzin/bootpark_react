@@ -4,11 +4,11 @@ import { useNavigate } from 'react-router-dom'
 import AdminOnly from './wrapper/AdminOnlyWrapper';
 import { createBookedSlot } from '../services/BookedSlotService';
 
-// если зашел админ - нужно отобразить все кнопки, иначе только кнопку "Забронировать"
+// Если зашел администратор - нужно отобразить все кнопки, иначе только кнопку "Забронировать"
 function ListParkingComponent() {
 
     const [parkings, setParkings] = useState([])
-
+    const [bookingErrors, setBookingErrors] = useState({}); // Состояние для хранения ошибок
     const navigator = useNavigate();
 
     useEffect(() => {
@@ -17,8 +17,8 @@ function ListParkingComponent() {
 
     function getAllParkings() {
         listParkings().then((response) => {
-            setParkings(response.data);
-            console.log(response.data)
+            const sortedParkings = response.data.sort((a, b) => a.name.localeCompare(b.name)); // Сортировка
+            setParkings(sortedParkings);
         }).catch(error => {
             console.error(error);
         })
@@ -50,15 +50,23 @@ function ListParkingComponent() {
         const userEntityId = localStorage.getItem("user_id");
         
         const bookedSlot = {parkingId, userEntityId, dateOfEnd}
-        createBookedSlot(bookedSlot).catch(error => {
-            console.error(error);
+        createBookedSlot(bookedSlot)
+        .then(() => {  // если добавление успешно - уменьшаем количество свободных мест
+            console.log(userEntityId, parkingId);
+
+            updateParkingAvailableSlotsOnly(parkingId, parkingAvailableSlotsAmount - 1)
+            .then((response) => {
+                    console.log(response.data);
+                    getAllParkings();
         })
-
-        console.log(userEntityId, parkingId);
-
-        updateParkingAvailableSlotsOnly(parkingId, parkingAvailableSlotsAmount - 1).then((response) => {
-                console.log(response.data);
-                getAllParkings();
+        })
+        .catch(error => {  // иначе добавляем ошибку для данной парковки, что у данного пользователя уже есть место на этой парковке
+            console.error(error);
+            // Обновляем состояние ошибок для этой парковки
+            setBookingErrors((prevErrors) => ({
+                ...prevErrors,
+                [parkingId]: 'Место на парковке уже забронировано.',
+            }));
         })
     }
 
@@ -97,8 +105,15 @@ function ListParkingComponent() {
                             <td>
                                 <button
                                     className='btn btn-success'
-                                    disabled={parking.availableSlotsAmount === 0}
-                                    onClick={() => bookParking(parking.id, parking.availableSlotsAmount)}>Забронировать</button>
+                                    disabled={parking.availableSlotsAmount === 0 || bookingErrors[parking.id]}  // Кнопка деактивируется, если нет свободных мест или пользователь уже имеет активную бронь
+                                    onClick={() => bookParking(parking.id, parking.availableSlotsAmount)}>
+                                        Забронировать
+                                </button>
+                                {bookingErrors[parking.id] && (
+                                    <div style={{ color: 'green', marginTop: '5px' }}>
+                                        {bookingErrors[parking.id]}
+                                    </div>
+                                )}
                             </td>
                         </tr>
                     )
