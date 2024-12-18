@@ -117,6 +117,13 @@ function ListParkingBookedSlotsComponent() {
         <div className='container'>
             <h2 className='text-center' style={{margin: "10px"}}>Список бронирований для парковки "{parkingName}"</h2>
             <table className='table table-striped table-bordered'>
+                <thead>
+                    <tr>
+                        <th>Действителен до</th>
+                        <th>Пользователь</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
                 <tbody>
                     {bookedSlots.length > 0 ? (
                         bookedSlots.map(bookedSlot =>

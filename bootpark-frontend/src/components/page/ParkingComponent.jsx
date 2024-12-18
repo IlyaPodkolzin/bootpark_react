@@ -117,64 +117,60 @@ const ParkingComponent = () => {
     }
 
     return (
-        <div className='container'>
-            <br></br>
-            <div className='row'>
-                <div className='card col-md-6 offset-md-3 offset-md-3'>
-                    {
-                        pageTitle()
-                    }
-                    <div className='card-body'>
-                        <form>
-
-                            <div className='form-group mb-2'>
-                                <label className='form-label'>Название: 
-                                <input
-                                    type='text'
-                                    placeholder='Введите название парковки'
-                                    name='name'
-                                    value={name}
-                                    className={`form-control ${ errors.name ? 'is-invalid': ''}`}
-                                    onChange={(e) => setName(e.target.value)}
-                                ></input>
-                                { errors.name && <div className='invalid-feedback'> { errors.name} </div> }
-                                </label>
-                            </div>
-
-                            <div className='form-group mb-2'>
-                                <label className='form-label'>Адрес: 
-                                <input
-                                    type='text'
-                                    placeholder='Введите адрес парковки'
-                                    name='address'
-                                    value={address}
-                                    className={`form-control ${ errors.address ? 'is-invalid': ''}`}
-                                    onChange={(e) => setAddress(e.target.value)}
-                                ></input>
-                                { errors.address && <div className='invalid-feedback'> { errors.address} </div> }
-                                </label>
-                            </div>
-
-                            <div className='form-group mb-2'>
-                                <label className='form-label'>Вместимость: 
-                                <input
-                                    type='number'
-                                    placeholder='Введите вместимость парковки'
-                                    name='parkingSlotsAmount'
-                                    value={parkingSlotsAmount}
-                                    className={`form-control ${ errors.parkingSlotsAmount ? 'is-invalid': ''}`}
-                                    onChange={(e) => setParkingSlotsAmount(e.target.value)}
-                                ></input>
-                                { errors.parkingSlotsAmount && <div className='invalid-feedback'> { errors.parkingSlotsAmount} </div> }
-                                </label>
-                            </div>
-
-                            <button className='btn btn-success' onClick={saveOrUpdateParking}>Подтвердить</button>
-                        </form>
+        <div className="container d-flex justify-content-center align-items-center" style={{ marginTop: "30px" }}>
+            <div className="card col-md-6 shadow">
+                <div className="card-header bg-dark text-white text-center">
+                <h3>{pageTitle()}</h3>
+                </div>
+                <div className="card-body">
+                <form>
+                    <div className="form-group mb-3">
+                    <label className="form-label">Название:</label>
+                    <input
+                        type="text"
+                        placeholder="Введите название парковки"
+                        name="name"
+                        value={name}
+                        className={`form-control ${errors.name ? 'is-invalid' : ''}`}
+                        onChange={(e) => setName(e.target.value)}
+                    />
+                    {errors.name && <div className="invalid-feedback">{errors.name}</div>}
                     </div>
+
+                    <div className="form-group mb-3">
+                    <label className="form-label">Адрес:</label>
+                    <input
+                        type="text"
+                        placeholder="Введите адрес парковки"
+                        name="address"
+                        value={address}
+                        className={`form-control ${errors.address ? 'is-invalid' : ''}`}
+                        onChange={(e) => setAddress(e.target.value)}
+                    />
+                    {errors.address && <div className="invalid-feedback">{errors.address}</div>}
+                    </div>
+
+                    <div className="form-group mb-3">
+                    <label className="form-label">Вместимость:</label>
+                    <input
+                        type="number"
+                        placeholder="Введите вместимость парковки"
+                        name="parkingSlotsAmount"
+                        value={parkingSlotsAmount}
+                        className={`form-control ${errors.parkingSlotsAmount ? 'is-invalid' : ''}`}
+                        onChange={(e) => setParkingSlotsAmount(e.target.value)}
+                    />
+                    {errors.parkingSlotsAmount && <div className="invalid-feedback">{errors.parkingSlotsAmount}</div>}
+                    </div>
+
+                    <div className="d-flex justify-content-center">
+                    <button className="btn btn-success w-50" onClick={saveOrUpdateParking}>
+                        Подтвердить
+                    </button>
+                    </div>
+                </form>
                 </div>
             </div>
-            
         </div>
     )
 }
